@@ -1,7 +1,7 @@
 {
     "name": "alec-lefors/openid-connect-permissions",
     "description": "Set user role and allow access from OpenID user claims.",
-    "type": "wordpress-plugin",
+    "type": "wordpress-muplugin",
     "license": "GPL-3.0-or-later",
     "homepage": "https://github.com/alec-lefors/openid-connect-permissions/",
     "authors": [
