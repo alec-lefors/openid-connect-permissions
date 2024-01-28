@@ -1,27 +1,39 @@
 <?php
 /**
- * WP Plugin Scaffold
+ * WordPress OpenID Connect Permissions
  *
- * TODO: The description for the plugin scaffolded by this file.
- *
- * PHP version 7.4.27
+ * Set user role and allow access from OpenID user claims.
  *
  * @category WordPress_Plugin
- * @package  TODO
- * @author   Tom McFarlin <tom@tommcfarlin.com>
+ * @package  openid-connect-permissions
+ * @author   Alec LeFors <alec@lefors.me>
  * @license  GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>
- * @link     https://github.com/tommcfarlin/wp-plugin-scaffold/
- * @since    TODO: Date
+ * @link     https://github.com/alec-lefors/openid-connect-permissions
  *
  * @wordpress-plugin
- * Plugin Name: WP Plugin Scaffold
- * Plugin URI:  https://github.com/tommcfarlin/wp-plugin-scaffold/
- * Description: The description for the plugin scaffolded by this file.
- * Author:      Tom McFarlin <tom@tommcfarlin.com>
- * Version:     1.0.0
+ * Plugin Name:  WordPress OpenID Connect Permissions
+ * Plugin URI:   https://github.com/alec-lefors/openid-connect-permissions
+ * Description:  Set user role and allow access from OpenID user claims.
+ * Version:      1.0.0
+ * Author:       Alec LeFors
+ * License:      GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>
+ * Requires PHP: 8.2
  */
 
-namespace WPPluginScaffold;
 
 defined('WPINC') || die;
 require_once __DIR__ . '/vendor/autoload.php';
+
+add_filter('openid-connect-generic-user-login-test', function($result, $userClaim) {
+    if($userClaim['access_wordpress'] ?? false) {
+        return $result;
+    }
+
+    return false;
+}, 10, 2);
+
+add_action('openid-connect-generic-update-user-using-current-claim', function($user, $userClaim) {
+    if($role = $userClaim['wp_user_role'] ?? false) {
+        $user->set_role($role);
+    }
+}, 10, 2);
