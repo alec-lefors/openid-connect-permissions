@@ -22,7 +22,6 @@
 
 
 defined('WPINC') || die;
-require_once __DIR__ . '/vendor/autoload.php';
 
 add_filter('openid-connect-generic-user-login-test', function($result, $userClaim) {
     if($userClaim['access_wordpress'] ?? false) {
