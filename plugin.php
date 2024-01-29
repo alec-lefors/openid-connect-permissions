@@ -24,7 +24,7 @@
 defined('WPINC') || die;
 
 add_filter('openid-connect-generic-user-login-test', function($result, $userClaim) {
-    if($userClaim['access_wordpress'] ?? false) {
+    if($userClaim['profile']['access_wordpress'] ?? false) {
         return $result;
     }
 
@@ -32,7 +32,7 @@ add_filter('openid-connect-generic-user-login-test', function($result, $userClai
 }, 10, 2);
 
 add_action('openid-connect-generic-update-user-using-current-claim', function($user, $userClaim) {
-    if($role = $userClaim['wp_user_role'] ?? false) {
+    if($role = $userClaim['profile']['wp_user_role'] ?? false) {
         $user->set_role($role);
     }
 }, 10, 2);
